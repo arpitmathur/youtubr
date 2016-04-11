@@ -120,19 +120,38 @@ youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
 # print video_response
 
 myData = []
+counter = 0
+newFile = open('MyVideoData.json','w')
+newFile.write('{')
+newFile.write('"data": [')
 for value in videoID:
     video_response = youtube.videos().list(
     id=value,
     part='snippet, contentDetails'
     ).execute()
     # print video_response
+    # video_response.encode('ascii', 'ignore')
 
     for video_result in video_response.get("items", []):
         category = int((video_result["snippet"]["categoryId"]))
         title = ((video_result["snippet"]["title"]))
+        title = title.encode('utf-8')
+        title = title.replace('"','\'')
         duration = video_result['contentDetails']['duration']
         dur=isodate.parse_duration(duration)
         tuple = ((title),categories.get(str(category)),dur.total_seconds())
         myData.append(tuple)
+        newFile.write('{')
+        newFile.write('"title":' + '"' + tuple[0] + '"' + ',')
+        if tuple[1] is not None:
+            newFile.write('"category":' + '"' + tuple[1] + '"'+ ',')
+        else:
+            newFile.write('"category":' + '" N/A"'+ ',')
+        newFile.write('"duration":' + '"' + str(tuple[2]) + '"')
+        newFile.write('},')
+    counter +=1
+    if counter == 2000:
+        break
 
-# print myData
+
+newFile.write(']}')
