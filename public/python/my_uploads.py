@@ -1,58 +1,138 @@
-// The client ID is obtained from the {{ Google Cloud Console }}
-// at {{ https://cloud.google.com/console }}.
-// If you run this code from a server other than http://localhost,
-// you need to register your own client ID.
-var OAUTH2_CLIENT_ID = '794103750211-v94cgesj4ivrmst7n67g63rijvpj25b9.apps.googleusercontent.com';
-var OAUTH2_SCOPES = [
-  'https://www.googleapis.com/auth/youtube'
-];
+#!/usr/bin/python
 
-// Upon loading, the Google APIs JS client automatically invokes this callback.
-googleApiClientReady = function() {
-  gapi.auth.init(function() {
-    window.setTimeout(checkAuth, 1);
-  });
-}
+import json
+import httplib2
+import os
+import sys
+import sys
+sys.path.insert(1, '/Library/Python/2.7/site-packages')
+import isodate
+from apiclient.discovery import build
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
+from oauth2client.tools import argparser, run_flow
 
-// Attempt the immediate OAuth 2.0 client flow as soon as the page loads.
-// If the currently logged-in Google Account has previously authorized
-// the client specified as the OAUTH2_CLIENT_ID, then the authorization
-// succeeds with no user intervention. Otherwise, it fails and the
-// user interface that prompts for authorization needs to display.
-function checkAuth() {
-  gapi.auth.authorize({
-    client_id: OAUTH2_CLIENT_ID,
-    scope: OAUTH2_SCOPES,
-    immediate: true
-  }, handleAuthResult);
-}
 
-// Handle the result of a gapi.auth.authorize() call.
-function handleAuthResult(authResult) {
-  if (authResult && !authResult.error) {
-    // Authorization was successful. Hide authorization prompts and show
-    // content that should be visible after authorization succeeds.
-    $('.pre-auth').hide();
-    $('.post-auth').show();
-    loadAPIClientInterfaces();
-  } else {
-    // Make the #login-link clickable. Attempt a non-immediate OAuth 2.0
-    // client flow. The current function is called when that flow completes.
-    $('#login-link').click(function() {
-      gapi.auth.authorize({
-        client_id: OAUTH2_CLIENT_ID,
-        scope: OAUTH2_SCOPES,
-        immediate: false
-        }, handleAuthResult);
-    });
-  }
-}
+# The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
+# the OAuth 2.0 information for this application, including its client_id and
+# client_secret. You can acquire an OAuth 2.0 client ID and client secret from
+# the {{ Google Cloud Console }} at
+# {{ https://cloud.google.com/console }}.
+# Please ensure that you have enabled the YouTube Data API for your project.
+# For more information about using OAuth2 to access the YouTube Data API, see:
+#   https://developers.google.com/youtube/v3/guides/authentication
+# For more information about the client_secrets.json file format, see:
+#   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
+CLIENT_SECRETS_FILE = "client_secrets.json"
 
-// Load the client interfaces for the YouTube Analytics and Data APIs, which
-// are required to use the Google APIs JS client. More info is available at
-// https://developers.google.com/api-client-library/javascript/dev/dev_jscript#loading-the-client-library-and-the-api
-function loadAPIClientInterfaces() {
-  gapi.client.load('youtube', 'v3', function() {
-    handleAPILoaded();
-  });
-}
+# This variable defines a message to display if the CLIENT_SECRETS_FILE is
+# missing.
+MISSING_CLIENT_SECRETS_MESSAGE = """
+WARNING: Please configure OAuth 2.0
+
+To make this sample run you will need to populate the client_secrets.json file
+found at:
+
+   %s
+
+with information from the {{ Cloud Console }}
+{{ https://cloud.google.com/console }}
+
+For more information about the client_secrets.json file format, please visit:
+https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
+""" % os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                   CLIENT_SECRETS_FILE))
+
+# This OAuth 2.0 access scope allows for read-only access to the authenticated
+# user's account, but not other types of account access.
+YOUTUBE_READONLY_SCOPE = "https://www.googleapis.com/auth/youtube.readonly"
+YOUTUBE_API_SERVICE_NAME = "youtube"
+YOUTUBE_API_VERSION = "v3"
+
+categories = {};
+
+categories["1"] = "Film & Animation"
+categories["2"] = "Autos & Vehicles"
+categories["10"] = "Music"
+categories["15"] = "Pets & Animals"
+categories["17"] = "Sports"
+categories["18"] = "Short Movies"
+categories["19"] = "Travel & Events"
+categories["20"] = "Gaming"
+categories["21"] = "Videoblogging"
+categories["23"] = "Comedy"
+categories["24"] = "Entertainment"
+categories["25"] = "News & Politics"
+categories["26"] = "Howto & Style"
+categories["27"] = "Education"
+categories["28"] = "Science & Technology"
+categories["29"] = "Nonprofits & Activism"
+categories["30"] = "Movies"
+categories["31"] = "Anime/Animation"
+categories["32"] = "Action/Adventure"
+categories["33"] = "Classics"
+categories["34"] = "Comedy"
+categories["35"] = "Documentary"
+categories["36"] = "Drama"
+categories["37"] = "Family"
+categories["38"] = "Foreign"
+categories["39"] = "Horror"
+categories["40"] = "Sci-Fi/Fantasy"
+categories["41"] = "Thriller"
+categories["42"] = "Shorts"
+categories["43"] = "Shows"
+categories["44"] = "Trailers"
+
+
+with open('watch-history.json','r') as data_file:
+        data = json.load(data_file)
+
+
+videoID = []
+
+for num in data:
+    temp = str(num['snippet']['resourceId']['videoId'])
+    videoID.append(temp)
+
+
+
+
+flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
+  message=MISSING_CLIENT_SECRETS_MESSAGE,
+  scope=YOUTUBE_READONLY_SCOPE)
+
+storage = Storage("%s-oauth2.json" % sys.argv[0])
+credentials = storage.get()
+
+if credentials is None or credentials.invalid:
+  flags = argparser.parse_args()
+  credentials = run_flow(flow, storage, flags)
+
+youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+  http=credentials.authorize(httplib2.Http()))
+
+# Retrieve the contentDetails part of the channel resource for the
+# authenticated user's channel.
+# video_response = youtube.videos().list(
+#     id='5L-RMaHdafA',
+#     part='snippet, contentDetails'
+#     ).execute()
+# print video_response
+
+myData = []
+for value in videoID:
+    video_response = youtube.videos().list(
+    id=value,
+    part='snippet, contentDetails'
+    ).execute()
+    # print video_response
+
+    for video_result in video_response.get("items", []):
+        category = int((video_result["snippet"]["categoryId"]))
+        title = ((video_result["snippet"]["title"]))
+        duration = video_result['contentDetails']['duration']
+        dur=isodate.parse_duration(duration)
+        tuple = ((title),categories.get(str(category)),dur.total_seconds())
+        myData.append(tuple)
+
+# print myData
