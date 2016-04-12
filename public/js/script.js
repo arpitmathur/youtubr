@@ -9,7 +9,7 @@ function getStreamgraphSettings()
     s.colors.highlight = 0;
     
     // Change the color source used for the LastFm color picker.
-    s.colors.image = "../deps/layers";
+    s.colors.image = "./js/deps/layers";
     return s;
 }
 
