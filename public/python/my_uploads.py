@@ -133,20 +133,35 @@ for value in videoID:
     # video_response.encode('ascii', 'ignore')
 
     for video_result in video_response.get("items", []):
+
+        channelId = video_result["snippet"]["channelId"]
+        results = youtube.channels().list(
+            part="snippet",
+            id=channelId).execute()
+        for chanel in results.get("items", []):
+            channel =  chanel["snippet"]["title"]
         category = int((video_result["snippet"]["categoryId"]))
         title = ((video_result["snippet"]["title"]))
         title = title.encode('utf-8')
         title = title.replace('"','\'')
+        channel = channel.encode('utf-8')
+        channel = channel.replace('"','\'')
+
+        thumnailUrl = video_result["snippet"]["thumbnails"]["default"]["url"]
+        thumnailUrl = thumnailUrl.encode('utf-8')
+
         duration = video_result['contentDetails']['duration']
         dur=isodate.parse_duration(duration)
-        tuple = ((title),categories.get(str(category)),dur.total_seconds())
+        tuple = ((title),categories.get(str(category)),dur.total_seconds(),channel,thumnailUrl)
         myData.append(tuple)
         newFile.write('{')
         newFile.write('"title":' + '"' + tuple[0] + '"' + ',')
+        newFile.write('"Channel":' + '"' + tuple[3] + '"' + ',')
         if tuple[1] is not None:
             newFile.write('"category":' + '"' + tuple[1] + '"'+ ',')
         else:
             newFile.write('"category":' + '" N/A"'+ ',')
+        newFile.write('"Thumbnail Url":' + '"' + tuple[4] + '"' + ',')
         newFile.write('"duration":' + '"' + str(tuple[2]) + '"')
         newFile.write('},')
     counter +=1
