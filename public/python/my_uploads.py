@@ -154,24 +154,21 @@ for value in videoID:
         dur=isodate.parse_duration(duration)
         tuple = ((title),categories.get(str(category)),dur.total_seconds(),channel,thumnailUrl)
         myData.append(tuple)
+        newFile.write('{')
+        newFile.write('"title":' + '"' + tuple[0] + '"' + ',')
+        newFile.write('"Channel":' + '"' + tuple[3] + '"' + ',')
+        if tuple[1] is not None:
+            newFile.write('"category":' + '"' + tuple[1] + '"'+ ',')
+        else:
+            newFile.write('"category":' + '" N/A"'+ ',')
+        newFile.write('"Thumbnail Url":' + '"' + tuple[4] + '"' + ',')
+        newFile.write('"duration":' + '"' + str(tuple[2]) + '"' + ',')
+        newFile.write('"Number":' + '"' + str(counter*-1) + '"')
+
+        newFile.write('},')
     counter +=1
     if counter == 2000:
         break
-temp = 0
-for x in myData:
-        newFile.write('{')
-        newFile.write('"title":' + '"' + x[0] + '"' + ',')
-        newFile.write('"Channel":' + '"' + xx[3] + '"' + ',')
-        if tuple[1] is not None:
-            newFile.write('"category":' + '"' + x[1] + '"'+ ',')
-        else:
-            newFile.write('"category":' + '" N/A"'+ ',')
-        newFile.write('"Thumbnail Url":' + '"' + x[4] + '"' + ',')
-        newFile.write('"duration":' + '"' + str(x[2]) + '"' + ',')
-        newFile.write('"Number":' + '"' + str(temp+counter) + '"')
-
-        newFile.write('},')
-        temp -=1
 
 
 newFile.write(']}')
