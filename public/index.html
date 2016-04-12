@@ -19,40 +19,38 @@
  <body style="padding: 10px;">
    <div class="row">
       <div class="large-12 columns">
-          <h1 style="display: inline; margin-right: 10px; color: red; text-align: center">YOU<span style="font-weight: bold; color: black; text-align: center">TUBR</span></h1>
+          <h1 style="margin-right: 10px; color: red; text-align: center">YOU<span style="font-weight: bold; color: black; text-align: center">TUBR</span></h1>
           
-          <h5 style="display: inline; text-align: center">
+          <h5 style="text-align: center; margin-bottom: 35px">
             Arpit Mathur, Neha Sharma, Manav Ramesh, Sonya Khan, Devin Ho
           </h5>
       </div>
       <div class="large-12 columns">
-         <p>The goal of our visualization was to get a sense of where all of the time we spend on Youtube is going. More specifically, we wanted to see what type of videos we were watching (Gaming, Music, etc) and what channels we frequented the most. In addition, we wanted to see how this viewing pattern changed over time. We used the data Google provides as well as the Youtube API to grab data that wasn't initially given (data courtesy of Manav).</p>
-
-         <p>Our visualization is split up into two parts: a Sunburst graph and a Steamgraph.</p>
+         <p>The goal of our visualization was to get a sense of where all of the time we spend on Youtube is going. More specifically, we wanted to see what type of videos we were watching (Gaming, Music, etc) and what channels we frequented the most. In addition, we wanted to see how this viewing pattern changed over time. We used the data Google provides as well as the Youtube API to grab data that wasn't initially given (data courtesy of Manav). Our visualization is split up into two parts: a Zoomable Sunburst graph and a Steamgraph.</p>
       </div>
    </div>
   
 
     <div class="row">
        <div class="large-12 columns" style="padding-bottom: 20px;">
-         <h2>Sunburst</h2>
+         <h2 style="text-align: center">
+          Sunburst
+        </h2>
           <div id="div2"></div>
        </div>
        <div class="large-12 columns">
-           <p>The Sunburst graph is easiest read from the center outwards.</p>
-           <p>The center represents the highest level division in our data, in this we are dividing the watch history by categories. The next layer outward represents a specific category. After that, specific channels from a category are shown, and finally videos from those channels.</p>
-           <p>Hovering over a specific slice tells you what that slice represents.</p>
+           <p>The Zoomable Sunburst graph is easiest to read from the center outwards. The center represents the highest level division in our data. We are dividing the watch history by categories in this level. The next layer outward represents the specific channels that make up the category in the layer underneath it. The last layer is comprised of videos from those channels.</p>
+           <p style="text-align: center; font-weight: bold; margin-bottom: 30px;">Hovering over a specific slice tells you what that slice represents.</p>
        </div>
-   </div>
 
-   <div class="row">
       <div class="large-12 columns">
-         <h2>Steamgraph</h2>
+         <h2 style="text-align: center; margin-bottom: 30px; margin-top: 10px">
+          Steamgraph
+        </h2>
          <canvas id="full" datasrc="js/streamgraph.pjs"></canvas>
       </div>
       <div class="large-12 columns">
-           <p>This streamgraph shows us the visualization of watching trends over time spread across channels.</p>
-           <p>The different colors of the graph denote different channels and the rise and fall of the layers denote what proportion of time was spent on each channel at each timepoint.</p> 
+           <p style="margin-top: 20px; margin-bottom: 50 px">This streamgraph shows us the visualization of watching trends over time spread across channels. The different colors of the graph denote different channels and the rise and fall of the layers denote what proportion of time was spent on each channel at each timepoint.</p> 
        </div>
 
 

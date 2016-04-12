@@ -30,12 +30,12 @@ function Settings()
     this.settings = [this.Sort, this.Layout, this.ColorPicker, this.Curve];
     
     this.colors = {};
-    this.colors.background = 0;
-    this.colors.neutral = 200;
-    this.colors.highlight = 255;
-    this.colors.image = "../deps/layers-nyt";
+    this.colors.background = 255;
+    this.colors.neutral = 0;
+    this.colors.highlight = 0;
+    this.colors.image = "../deps/layers";
     
-    this.show_settings = true;
+    this.show_settings = false;
     this.show_legend = true;
 }
 
