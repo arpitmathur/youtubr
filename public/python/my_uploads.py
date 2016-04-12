@@ -162,7 +162,9 @@ for value in videoID:
         else:
             newFile.write('"category":' + '" N/A"'+ ',')
         newFile.write('"Thumbnail Url":' + '"' + tuple[4] + '"' + ',')
-        newFile.write('"duration":' + '"' + str(tuple[2]) + '"')
+        newFile.write('"duration":' + '"' + str(tuple[2]) + '"' + ',')
+        newFile.write('"Number":' + '"' + str(counter*-1) + '"')
+
         newFile.write('},')
     counter +=1
     if counter == 2000:
