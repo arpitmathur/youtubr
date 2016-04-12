@@ -1,6 +1,6 @@
-var width = 400,
-    height = 400,
-    radius = Math.min(width, height) / 2;
+var width = 600,
+    height = 600,
+    radius = Math.min(width, height) / 2.1;
 
 var x = d3.scale.linear()
     .range([0, 2 * Math.PI]);

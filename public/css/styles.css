@@ -2,6 +2,11 @@ h1, h2, h3, h4, h5, p{
   font-family: 'Roboto Condensed', sans-serif !important;
 }
 
+svg{
+  display: block;
+  margin: 0 auto;
+}
+
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: auto;
