@@ -2,7 +2,7 @@ function getStreamgraphSettings()
 {
      var s = new Settings();
     s.show_settings = true;
-    s.show_legend = false;
+    s.show_legend = true;
     
 
     // Add the PitchColorPicker function defined below.
