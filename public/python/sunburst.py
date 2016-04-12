@@ -36,7 +36,7 @@ from pprint import pprint
 list = []
 channels = []
 
-with open('MyVideoData1.json') as data_file:
+with open('MyVideoData_clean.json') as data_file:
 	data = json.load(data_file)
 
 
@@ -49,7 +49,7 @@ for entry in data['data']:
 with open('temp.json', 'w') as write_file:
 	for entry in data['data']:
 		for channel in channels:
-			if entry['Channel'] is channel['name']:
+			if entry['Channel'] == channel['name']:
 				entry['name'] = entry['title']
 				entry['size'] = entry['duration']
 				channel['children'].append(entry)
@@ -72,7 +72,7 @@ for entry in data:
 		list2.append(entry['category'])
 
 i = 0
-with open('sunburst.json', 'w') as write_file:
+with open('sunburst1.json', 'w') as write_file:
 	for entry in data:
 		#print entry['category']
 		for cat in sunburst:
